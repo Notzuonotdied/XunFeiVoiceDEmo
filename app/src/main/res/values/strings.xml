@@ -1,6 +1,13 @@
 <resources>
-    <string name="app_name">XunFeiDemo</string>
+    <string name="app_name">智能应答机器人</string>
 
-    <string name="hello_world">Hello world!</string>
+    <string name="hello_world">Hello World!</string>
     <string name="action_settings">Settings</string>
+    <string name="send_button">发送</string>
+    <string name="please_speak">Please Speak</string>
+    <string name="inputint">正在输入中……</string>
+    <string name="default_ip">默认ip地址</string>
+    <string name="alert_ip">自定义ip地址</string>
+    <string name="port">port</string>
+    <string name="IP">IP</string>
 </resources>

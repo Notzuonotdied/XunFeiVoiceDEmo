@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/other_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:orientation="horizontal"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp">
+
+        <zhaoq_qiang.xunfeidemo.View.CircleImageView
+            android:id="@+id/other_headview"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@mipmap/python" />
+
+        <TextView
+            android:id="@+id/other_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/python"
+            android:gravity="center"
+            android:inputType="textMultiLine"
+            android:maxWidth="230dp"
+            android:paddingLeft="18dp"
+            android:paddingRight="8dp"
+            android:text="Hello Word!"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/mine_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:orientation="horizontal"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp">
+
+        <TextView
+            android:id="@+id/mine_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/hadoop"
+            android:gravity="center"
+            android:inputType="textMultiLine"
+            android:maxWidth="230dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="18dp"
+            android:text="你好"
+            android:textSize="16sp" />
+
+        <zhaoq_qiang.xunfeidemo.View.CircleImageView
+            android:id="@+id/mine_headview"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@mipmap/java" />
+
+    </LinearLayout>
+
+</LinearLayout>

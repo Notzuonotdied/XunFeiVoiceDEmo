@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="zhaoq_qiang.xunfeidemo.Activity.StartActivity">
+
+    <include layout="@layout/start_header"
+        android:layout_height="?actionBarSize"
+        android:layout_width="match_parent"/>
+
+    <android.support.v4.widget.Space
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
+
+    <Button
+        android:id="@+id/default_ip"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:text="@string/default_ip"
+        android:textColor="@color/color_white"
+        android:background="@drawable/send_btn_selector"/>
+
+    <android.support.v4.widget.Space
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/ip_address"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:hint="@string/IP"
+            android:gravity="center"/>
+
+        <EditText
+            android:id="@+id/port"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:hint="@string/port"
+            android:gravity="center"/>
+
+        <Button
+            android:id="@+id/submit"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/send_btn_selector"
+            android:text="@string/send_button"/>
+
+    </LinearLayout>
+
+</LinearLayout>
