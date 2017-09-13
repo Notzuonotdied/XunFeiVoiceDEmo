@@ -1,4 +1,5 @@
 # XunFeiVoiceDEmo
-讯飞语音Demo
 
-csdn:http://blog.csdn.net/u013233097/article/details/49834761
+这是聊天机器人的客户端。
+
+![](device-2017-09-13-152010.png)
