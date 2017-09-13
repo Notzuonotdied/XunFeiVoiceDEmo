@@ -4,13 +4,15 @@
     android:id="@+id/content_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     android:orientation="vertical"
     tools:context=".Activity.MainActivity">
 
-    <include layout="@layout/header"
+    <include
         android:id="@+id/header"
-        android:layout_height="?actionBarSize"
-        android:layout_width="match_parent"/>
+        layout="@layout/header"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -39,7 +41,6 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="5dp"
-        android:background="@color/message_opt_bg"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingLeft="5dp"
@@ -56,19 +57,18 @@
             <ImageButton
                 android:id="@+id/voice_btn"
                 android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_height="match_parent"
                 android:background="@drawable/face_btn_selector"
                 android:scaleType="center" />
 
             <EditText
                 android:id="@+id/msg_edit"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:background="@android:color/transparent" />
         </LinearLayout>
 
-        <Button
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/send_msg"
             android:layout_width="80dp"
             android:layout_height="40dp"

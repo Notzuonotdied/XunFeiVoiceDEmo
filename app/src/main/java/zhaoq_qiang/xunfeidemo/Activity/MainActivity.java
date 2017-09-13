@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -59,8 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton voiceBtn;
     private EditText msgEdit;
     private android.widget.Button sendMsg;
-    private RelativeLayout relativeLayout;
-    private TextView textView;
+    private TextView robotStatus;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -69,12 +67,8 @@ public class MainActivity extends AppCompatActivity {
                 case 0:
                     String response = (String) msg.obj;
                     // 这里服务器开始回馈数据
-                    PlayerInfo playerInfo = new PlayerInfo();
-                    playerInfo.setTextContent(response);
-                    playerInfo.setMine(false);
-                    playerInfoList.add(playerInfo);
-                    adapter.notifyDataSetChanged();//属性里设置自动滚动
-                    textView.setText(R.string.app_name);
+                    chatWith(false, response);
+                    robotStatus.setText(R.string.app_name);
                     //msgEdit.setText(response);
                     //say(response);
                     break;
@@ -86,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            // TODO Auto-generated method stub
             if (mark == 0) {
                 mark = 1;
                 btnVoice();
@@ -105,14 +98,10 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.send_msg:
                     String content = msgEdit.getText().toString();
-                    PlayerInfo playerInfo = new PlayerInfo();
-                    playerInfo.setTextContent(content);
-                    playerInfo.setMine(true);
-                    playerInfoList.add(playerInfo);
-                    adapter.notifyDataSetChanged();//属性里设置自动滚动
+                    chatWith(true, content);
+                    msgEdit.setText("");
                     new asyncData().execute(content);
                     Log.i("Notzuonotdied", "输入框中的内容： " + content);
-                    msgEdit.setText("");
                     break;
                 case R.id.msg_edit:
                     touchView.setVisibility(View.VISIBLE);
@@ -127,54 +116,47 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onSpeakResumed() {
-            // TODO Auto-generated method stub
 
         }
 
         @Override
         public void onSpeakProgress(int arg0, int arg1, int arg2) {
-            // TODO Auto-generated method stub
 
         }
 
         @Override
         public void onSpeakPaused() {
-            // TODO Auto-generated method stub
 
         }
 
         @Override
         public void onSpeakBegin() {
-            // TODO Auto-generated method stub
 
         }
 
         @Override
         public void onEvent(int arg0, int arg1, int arg2, Bundle arg3) {
-            // TODO Auto-generated method stub
 
         }
 
         @Override
         public void onCompleted(SpeechError arg0) {
-            // TODO Auto-generated method stub
             delay(500);
             //arg0.getPlainDescription(true);
         }
 
         @Override
         public void onBufferProgress(int arg0, int arg1, int arg2, String arg3) {
-            // TODO Auto-generated method stub
 
         }
     };
 
     @NonNull
     public static String parseIatResult(String json) {
-        StringBuffer ret = new StringBuffer();
+        StringBuilder ret = new StringBuilder();
         try {
-            JSONTokener tokener = new JSONTokener(json);
-            JSONObject joResult = new JSONObject(tokener);
+            JSONTokener token = new JSONTokener(json);
+            JSONObject joResult = new JSONObject(token);
 
             JSONArray words = joResult.getJSONArray("ws");
             for (int i = 0; i < words.length(); i++) {
@@ -204,6 +186,8 @@ public class MainActivity extends AppCompatActivity {
         playerInfoList = new ArrayList<>();
         adapter = new ChatMsgAdapter(this, playerInfoList);
         chatListView.setAdapter(adapter);
+        // 初始化数据
+        chatWith(false, "请问你有什么要问我的哇～");
     }
 
     private void initListener() {
@@ -215,13 +199,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        this.relativeLayout = (RelativeLayout) findViewById(R.id.header);
+        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.header);
         this.sendMsg = (Button) findViewById(R.id.send_msg);
         this.msgEdit = (EditText) findViewById(R.id.msg_edit);
         this.voiceBtn = (ImageButton) findViewById(R.id.voice_btn);
         this.touchView = findViewById(R.id.touch_view);
         this.chatListView = (ListView) findViewById(R.id.chat_list_view);
-        this.textView = (TextView) relativeLayout.findViewById(R.id.main_header_tv);
+        this.robotStatus = (TextView) relativeLayout.findViewById(R.id.main_header_tv);
         this.playerInfoList = new ArrayList<>();
         this.adapter = new ChatMsgAdapter(this, playerInfoList);
         this.chatListView.setAdapter(adapter);
@@ -244,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 try {
                     HttpClient httpCient = new DefaultHttpClient();
-                    HttpGet httpGet = new HttpGet("http://104.128.83.198:5000/?txt=" + params);
+                    HttpGet httpGet = new HttpGet(Constant.myUrl + params);
                     //第三步：执行请求，获取服务器发还的相应对象
                     HttpResponse httpResponse = httpCient.execute(httpGet);
                     //第四步：检查相应的状态是否正常：检查状态码的值是200表示正常
@@ -257,8 +241,7 @@ public class MainActivity extends AppCompatActivity {
                         handler.sendMessage(message);
                     }
                 } catch (Exception e) {
-                    // TODO Auto-generated catch block
-                    //    e.printStackTrace();
+                    e.printStackTrace();
                 }
             }
         }).start();
@@ -279,7 +262,9 @@ public class MainActivity extends AppCompatActivity {
         //mark = 0;
     }
 
-    //TODO 开始说话：
+    /**
+     * 开始说话
+     */
     private void btnVoice() {
         RecognizerDialog dialog = new RecognizerDialog(this, null);
         dialog.setParameter(SpeechConstant.LANGUAGE, "zh_cn");
@@ -293,6 +278,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onError(SpeechError speechError) {
+
             }
         });
         dialog.show();
@@ -303,19 +289,24 @@ public class MainActivity extends AppCompatActivity {
     private void printResult(RecognizerResult results) {
         String text = parseIatResult(results.getResultString());
         // 自动填写地址
-        msgEdit.setText(text);
-        text = text.replaceAll("\\p{P}", "");
-        if (!TextUtils.isEmpty(text)) {
-            textView.setText(R.string.inputint);
-            send(text);
+        String tempText = text.replaceAll("\\p{P}", "");
+        if (!TextUtils.isEmpty(tempText)) {
+            PlayerInfo playerInfo = new PlayerInfo();
+            playerInfo.setTextContent(text);
+            playerInfo.setMine(true);
+            playerInfoList.add(playerInfo);
+            adapter.notifyDataSetChanged();//属性里设置自动滚动
+            robotStatus.setText(R.string.inputint);
+            send(tempText);
         }
+        msgEdit.setText("");
     }
 
     private class asyncData extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
             msgEdit.setEnabled(false);
-            textView.setText(R.string.inputint);
+            robotStatus.setText(R.string.inputint);
             super.onPreExecute();
         }
 
@@ -328,15 +319,19 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String string) {
             if (!TextUtils.isEmpty(string)) {
-                PlayerInfo playerInfo = new PlayerInfo();
-                playerInfo.setTextContent(string);
-                playerInfo.setMine(false);
-                playerInfoList.add(playerInfo);
-                adapter.notifyDataSetChanged();//属性里设置自动滚动
+                chatWith(false, string);
             }
             msgEdit.setEnabled(true);
-            textView.setText(R.string.app_name);
+            robotStatus.setText(R.string.app_name);
             super.onPostExecute(string);
         }
+    }
+
+    private void chatWith(boolean isMine, String content) {
+        PlayerInfo playerInfo = new PlayerInfo();
+        playerInfo.setTextContent(content);
+        playerInfo.setMine(isMine);
+        playerInfoList.add(playerInfo);
+        adapter.notifyDataSetChanged();//属性里设置自动滚动
     }
 }

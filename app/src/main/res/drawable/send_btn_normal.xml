@@ -5,7 +5,7 @@
     <size android:height="40dp"
         android:width="80dp"/>
 
-    <corners android:radius="5dp"/>
+    <corners android:radius="20dp"/>
 
     <solid android:color="@color/btn_normal"/>
 
