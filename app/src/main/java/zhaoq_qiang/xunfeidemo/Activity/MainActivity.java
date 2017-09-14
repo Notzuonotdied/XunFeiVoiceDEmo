@@ -302,6 +302,14 @@ public class MainActivity extends AppCompatActivity {
         msgEdit.setText("");
     }
 
+    private void chatWith(boolean isMine, String content) {
+        PlayerInfo playerInfo = new PlayerInfo();
+        playerInfo.setTextContent(content);
+        playerInfo.setMine(isMine);
+        playerInfoList.add(playerInfo);
+        adapter.notifyDataSetChanged();//属性里设置自动滚动
+    }
+
     private class asyncData extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
@@ -325,13 +333,5 @@ public class MainActivity extends AppCompatActivity {
             robotStatus.setText(R.string.app_name);
             super.onPostExecute(string);
         }
-    }
-
-    private void chatWith(boolean isMine, String content) {
-        PlayerInfo playerInfo = new PlayerInfo();
-        playerInfo.setTextContent(content);
-        playerInfo.setMine(isMine);
-        playerInfoList.add(playerInfo);
-        adapter.notifyDataSetChanged();//属性里设置自动滚动
     }
 }
